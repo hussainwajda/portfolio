@@ -5,7 +5,7 @@ const About = () => {
     <div className="about-section" id="about">
       <div className="about-me">
         <h3 className="title">About Me</h3>
-        <p className="para">
+        <p className="para sm:text-2xl">
           I am  Passionate and results-driven Full-Stack Developer with a strong background in crafting intuitive UIs, integrating secure backend APIs, and optimizing performance
           <br />
           <br />

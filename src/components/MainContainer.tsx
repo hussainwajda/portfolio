@@ -7,7 +7,8 @@ import Landing from "./Landing";
 import Navbar from "./Navbar";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
-import Work from "./Work";
+// import Work from "./Work";
+import ChromaGrid from "./work2";
 import setSplitText from "./utils/splitText";
 
 const TechStack = lazy(() => import("./TechStack"));
@@ -42,7 +43,8 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <About />
             <WhatIDo />
             {/* <Career /> */}
-            <Work />
+            {/* <Work /> */}
+            <ChromaGrid />
             {isDesktopView && (
               <Suspense fallback={<div>Loading....</div>}>
                 <TechStack />

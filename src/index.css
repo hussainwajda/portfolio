@@ -9,7 +9,7 @@
   line-height: 1.5;
   scroll-behavior: smooth;
   color-scheme: light dark;
-  color: #eae5ec;
+  color: #40c4ff;
   background-color: var(--backgroundColor);
 
   font-synthesis: none;
@@ -19,13 +19,23 @@
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  --accentColor: #c2a4ff;
+  --accentColor: #3b82f6;
   --backgroundColor: #0b080c;
   --vh: 100vh;
   --vh: 100svh;
 }
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('./assets/fonts/ClashDisplay-Medium.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
 h1,
-h2,
+h2 {
+  font-family: "Clash Display", sans-serif;
+}
 h3,
 h4,
 h5,

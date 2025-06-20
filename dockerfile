@@ -1,3 +1,11 @@
+# Builder stage
+FROM node:18-alpine as builder
+
+WORKDIR /app
+COPY . .
+RUN npm install --force && npm run build
+
+# Final stage with Caddy
 FROM caddy:alpine
 
 # Copy built files from builder stage

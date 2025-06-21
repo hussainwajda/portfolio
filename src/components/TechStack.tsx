@@ -1,214 +1,166 @@
-import * as THREE from "three";
-import { useRef, useMemo, useState, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
-import { EffectComposer, N8AO } from "@react-three/postprocessing";
-import {
-  BallCollider,
-  Physics,
-  RigidBody,
-  CylinderCollider,
-  RapierRigidBody,
-} from "@react-three/rapier";
+import type React from "react"
+import { useState } from "react"
+import Magnet from "./magnet"
+import { Database, Server, Settings, Globe } from "lucide-react"
+import { Divider } from "./divider"
 
-const textureLoader = new THREE.TextureLoader();
-const imageUrls = [
-  "/images/react2.webp",
-  "/images/next2.webp",
-  "/images/node2.webp",
-  "/images/express.webp",
-  "/images/mongo.webp",
-  "/images/mysql.webp",
-  "/images/typescript.webp",
-  "/images/javascript.webp",
-];
-const textures = imageUrls.map((url) => textureLoader.load(url));
-
-const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
-
-const spheres = [...Array(30)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
-}));
-
-type SphereProps = {
-  vec?: THREE.Vector3;
-  scale: number;
-  r?: typeof THREE.MathUtils.randFloatSpread;
-  material: THREE.MeshPhysicalMaterial;
-  isActive: boolean;
-};
-
-function SphereGeo({
-  vec = new THREE.Vector3(),
-  scale,
-  r = THREE.MathUtils.randFloatSpread,
-  material,
-  isActive,
-}: SphereProps) {
-  const api = useRef<RapierRigidBody | null>(null);
-
-  useFrame((_state, delta) => {
-    if (!isActive) return;
-    delta = Math.min(0.1, delta);
-    const impulse = vec
-      .copy(api.current!.translation())
-      .normalize()
-      .multiply(
-        new THREE.Vector3(
-          -50 * delta * scale,
-          -150 * delta * scale,
-          -50 * delta * scale
-        )
-      );
-
-    api.current?.applyImpulse(impulse, true);
-  });
-
-  return (
-    <RigidBody
-      linearDamping={0.75}
-      angularDamping={0.15}
-      friction={0.2}
-      position={[r(20), r(20) - 25, r(20) - 10]}
-      ref={api}
-      colliders={false}
-    >
-      <BallCollider args={[scale]} />
-      <CylinderCollider
-        rotation={[Math.PI / 2, 0, 0]}
-        position={[0, 0, 1.2 * scale]}
-        args={[0.15 * scale, 0.275 * scale]}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        scale={scale}
-        geometry={sphereGeometry}
-        material={material}
-        rotation={[0.3, 1, 1]}
-      />
-    </RigidBody>
-  );
+interface TechItem {
+  name: string
+  icon: string
+  color: string
 }
 
-type PointerProps = {
-  vec?: THREE.Vector3;
-  isActive: boolean;
-};
-
-function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
-  const ref = useRef<RapierRigidBody>(null);
-
-  useFrame(({ pointer, viewport }) => {
-    if (!isActive) return;
-    const targetVec = vec.lerp(
-      new THREE.Vector3(
-        (pointer.x * viewport.width) / 2,
-        (pointer.y * viewport.height) / 2,
-        0
-      ),
-      0.2
-    );
-    ref.current?.setNextKinematicTranslation(targetVec);
-  });
-
-  return (
-    <RigidBody
-      position={[100, 100, 100]}
-      type="kinematicPosition"
-      colliders={false}
-      ref={ref}
-    >
-      <BallCollider args={[2]} />
-    </RigidBody>
-  );
+interface TechCategory {
+  id: string
+  name: string
+  icon: React.ReactNode
+  items: TechItem[]
 }
 
-const TechStack = () => {
-  const [isActive, setIsActive] = useState(false);
+const techCategories: TechCategory[] = [
+  {
+    id: "frontend",
+    name: "Frontend",
+    icon: <Globe className="w-5 h-5" />,
+    items: [
+      { name: "React", icon: "/images/Frontend/react.svg", color: "#61DAFB" },
+      { name: "Next.js", icon: "/images/Frontend/next.svg", color: "#000000" },
+      { name: "TypeScript", icon: "/images/Frontend/ts.svg", color: "#3178C6" },
+      { name: "Tailwind CSS", icon: "/images/Frontend/tailwind.svg", color: "#06B6D4" },
+      { name: "Angular", icon: "/images/Frontend/angular.svg", color: "#DD0031" },
+      { name: "Vite", icon: "/images/Frontend/vite.svg", color: "#646CFF" },
+    ],
+  },
+  {
+    id: "backend",
+    name: "Backend",
+    icon: <Server className="w-5 h-5" />,
+    items: [
+      { name: "Node.js", icon: "/images/Backend/node.svg", color: "#339933" },
+      { name: "Python", icon: "/images/Backend/python.svg", color: "#3776AB" },
+      { name: "Express", icon: "/images/Backend/express.svg", color: "#000000" },
+      { name: "REST API", icon: "/images/Backend/restapi.svg", color: "#009688" },
+      { name: "Django", icon: "/images/Backend/django.svg", color: "#092E20" },
+      { name: "PHP", icon: "/images/Backend/php.svg", color: "#6DB33F" },
+      { name: "Web Socket", icon: "/images/Backend/socket.svg", color: "#E10098" },
+    ],
+  },
+  {
+    id: "devops",
+    name: "DevOps",
+    icon: <Settings className="w-5 h-5" />,
+    items: [
+      { name: "Docker", icon: "/images/DevOps/docker.svg", color: "#2496ED" },
+      { name: "Kubernetes", icon: "/images/DevOps/kubernetes.svg", color: "#326CE5" },
+      { name: "AWS", icon: "/images/DevOps/aws.svg", color: "#FF9900" },
+      { name: "Vercel", icon: "/images/DevOps/vercel.svg", color: "#000000" },
+      { name: "GitHub Actions", icon: "/images/DevOps/github.svg", color: "#2088FF" },
+      { name: "Caddy", icon: "/images/DevOps/caddy.svg", color: "#D33833" },
+      { name: "Nginx", icon: "/images/DevOps/nginx.svg", color: "#009639" },
+    ],
+  },
+  {
+    id: "database",
+    name: "Database",
+    icon: <Database className="w-5 h-5" />,
+    items: [
+      { name: "MongoDB", icon: "/images/Database/mongo.svg", color: "#47A248" },
+      { name: "MySQL", icon: "/images/Database/mysql.svg", color: "#4479A1" },
+      { name: "PostgreSQL", icon: "/images/Database/postgres.svg", color: "#336791" },
+      { name: "Firestore", icon: "/images/Database/firestore.svg", color: "#FFCA28" },
+    ],
+  },
+]
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
-      setIsActive(scrollY > threshold);
-    };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  const materials = useMemo(() => {
-    return textures.map(
-      (texture) =>
-        new THREE.MeshPhysicalMaterial({
-          map: texture,
-          emissive: "#ffffff",
-          emissiveMap: texture,
-          emissiveIntensity: 0.3,
-          metalness: 0.5,
-          roughness: 1,
-          clearcoat: 0.1,
-        })
-    );
-  }, []);
+const TechStack: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("frontend")
+
+  const activeCategory = techCategories.find((cat) => cat.id === activeTab)
 
   return (
-    <div className="techstack">
-      <h2> My Techstack</h2>
+  <>
+    <Divider />  
+    <div className="w-full max-w-7xl mx-auto p-6">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
+          Tech <span className="text-[#40c4ff]">Stack</span>
+        </h2>
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          Explore my technical expertise across different domains. Each technology represents a tool in my development
+          arsenal.
+        </p>
+      </div>
 
-      <Canvas
-        shadows
-        gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
-        camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
-        onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
-        className="tech-canvas"
-      >
-        <ambientLight intensity={1} />
-        <spotLight
-          position={[20, 20, 25]}
-          penumbra={1}
-          angle={0.2}
-          color="white"
-          castShadow
-          shadow-mapSize={[512, 512]}
-        />
-        <directionalLight position={[0, 5, -4]} intensity={2} />
-        <Physics gravity={[0, 0, 0]}>
-          <Pointer isActive={isActive} />
-          {spheres.map((props, i) => (
-            <SphereGeo
-              key={i}
-              {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
-              isActive={isActive}
-            />
-          ))}
-        </Physics>
-        <Environment
-          files="/models/char_enviorment.hdr"
-          environmentIntensity={0.5}
-          environmentRotation={[0, 4, 2]}
-        />
-        <EffectComposer enableNormalPass={false}>
-          <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
-        </EffectComposer>
-      </Canvas>
+      {/* Tab Navigation */}
+      <div className="flex flex-wrap justify-center gap-2 mb-12">
+        {techCategories.map((category) => (
+          <button
+            key={category.id}
+            onClick={() => setActiveTab(category.id)}
+            className={`
+              flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-300
+              ${
+                activeTab === category.id
+                  ? "bg-[#40c4ff] text-black shadow-lg shadow-[#40c4ff]/25"
+                  : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white"
+              }
+            `}
+          >
+            {category.icon}
+            <span className="hidden sm:inline">{category.name}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Tech Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+        {activeCategory?.items.map((tech, index) => (
+          <Magnet key={tech.name} magnetStrength={3} padding={50} className="w-full">
+            <div
+              className="
+                group relative bg-gray-900/50 backdrop-blur-sm border border-gray-800 
+                rounded-2xl p-4 md:p-6 text-center transition-all duration-300 
+                hover:border-[#40c4ff]/50 hover:shadow-lg hover:shadow-[#40c4ff]/20
+                hover:bg-gray-800/50 cursor-pointer h-full
+              "
+              style={{
+                animationDelay: `${index * 100}ms`,
+              }}
+            >
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#40c4ff]/0 via-[#40c4ff]/5 to-[#40c4ff]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              {/* Content */}
+              <div className="relative z-10">
+                <div className="mb-3 flex justify-center transform group-hover:scale-110 transition-transform duration-300">
+                  <img src={tech.icon} alt={tech.name} className="w-12 h-12 md:w-16 md:h-16" />
+                </div>
+                <h3 className="text-sm md:text-base font-semibold text-white group-hover:text-[#40c4ff] transition-colors duration-300">
+                  {tech.name}
+                </h3>
+              </div>
+
+              {/* Animated border */}
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-[#40c4ff]/20 to-transparent animate-pulse" />
+              </div>
+            </div>
+          </Magnet>
+        ))}
+      </div>
+
+      {/* Category Info */}
+      <div className="mt-12 text-center">
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800/30 rounded-full border border-gray-700">
+          {activeCategory?.icon}
+          <span className="text-gray-300">
+            {activeCategory?.items.length} {activeCategory?.name} Technologies
+          </span>
+        </div>
+      </div>
     </div>
-  );
-};
+  </>
+  )
+}
 
-export default TechStack;
+export default TechStack

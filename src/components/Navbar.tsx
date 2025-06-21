@@ -42,8 +42,8 @@ const Navbar = () => {
   return (
     <>
       <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
-          <img className="navbar-logo w-40 h-17" src="/images/Hussy.png" alt="Hussy" />
+        <a href="/#" className="navbar-title flex flex-row" data-cursor="disable">
+          <img className="navbar-logo w-20 h-17" src="/images/Hussy.svg" alt="Hussy" /><h2 className="navbar-name mt-6 ">hussy<span className="text-white">dev</span></h2>
         </a>
         <a
           href="mailto:hussainwajda786@gmail.com"

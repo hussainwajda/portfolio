@@ -87,12 +87,10 @@ const WhatIDo = () => {
             <div className="what-corner"></div>
 
             <div className="what-content-in">
-              <h3>DEVELOP</h3>
-              <h4>Description</h4>
-              <p>
+              <h3>Develop</h3>
+
+              <p className="text-[#6e7d85] mb-6">
                 From Starting with HTML, CSS, and JavaScript to building complex MERN Stack applications, I've honed my skills in Full-Stack development.
-                <br />
-                <br />
               </p>
               <h5>Skillset & tools</h5>
               <div className="what-content-flex">
@@ -131,11 +129,8 @@ const WhatIDo = () => {
             <div className="what-corner"></div>
             <div className="what-content-in">
               <h3>DevOps</h3>
-              <h4>Description</h4>
-              <p>
+              <p className="text-[#6e7d85] mb-3">
                 I started DevOps as a curiosity, captivated by its promise of efficiency and collaboration. Now, it's not just a job; it's the rhythm of how I build and deliver.
-                <br />
-                <br />
               </p>
               <h5>Skillset & Technologies</h5>
               <div className="what-content-flex">

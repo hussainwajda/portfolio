@@ -164,7 +164,7 @@
 }
 .what-noTouch:hover .what-arrow::before,
 .what-content-active .what-arrow::before {
-  transform: translate(-50%, -20%) rotate(-225deg);
+  transform: translate(-50%, 0%) rotate(-225deg);
 }
 .what-border1 {
   position: absolute;

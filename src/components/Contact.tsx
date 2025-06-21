@@ -8,13 +8,13 @@ const Contact = () => {
         <h3>Contact</h3>
         <div className="contact-flex">
           <div className="contact-box">
-            <h4>Email</h4>
+            <h4 className="text-[#6e7d85]">Email</h4>
             <p>
               <a href="mailto:example@mail.com" data-cursor="disable">
                 hussainwajdawala.com
               </a>
             </p>
-            <h4>Location</h4>
+            <h4 className="text-[#6e7d85]">Location</h4>
             <p>
               <a href="#" data-cursor="disable">
                 Pimpri Chinchwad, Pune
@@ -22,7 +22,7 @@ const Contact = () => {
             </p>
           </div>
           <div className="contact-box">
-            <h4>Social</h4>
+            <h4 className="text-[#6e7d85]">Social</h4>
             <a
               href="https://github.com/hussainwajda"
               target="_blank"
@@ -49,7 +49,7 @@ const Contact = () => {
             </a>
           </div>
           <div className="contact-box">
-            <h2>
+            <h2 className="!tracking-wider">
               Designed and Developed <br /> by <span> Hussain Wajdawala </span>
             </h2>
             <h5>

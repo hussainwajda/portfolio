@@ -45,11 +45,12 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             {/* <Career /> */}
             {/* <Work /> */}
             <ChromaGrid />
-            {isDesktopView && (
+            {/* {isDesktopView && (
               <Suspense fallback={<div>Loading....</div>}>
                 <TechStack />
               </Suspense>
-            )}
+            )} */}
+            <TechStack />
             <Contact />
           </div>
         </div>

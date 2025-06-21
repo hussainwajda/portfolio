@@ -3,6 +3,7 @@ import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { Divider } from "./divider";
 
 gsap.registerPlugin(useGSAP);
 
@@ -48,6 +49,7 @@ const Work = () => {
 }, []);
   return (
     <div className="work-section" id="work">
+      <Divider />
       <div className="work-container section-container">
         <h2>
           My <span>Work</span>

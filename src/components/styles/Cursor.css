@@ -1,19 +1,32 @@
 .cursor-main {
-  --size: 0px;
   position: fixed;
-  top: calc(var(--size) / -2);
-  left: calc(var(--size) / -2);
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50px;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 50px;
   pointer-events: none;
   z-index: 99;
   background-color: #00bfff;
-  box-shadow: 0px 0px 30px 0px rgb(78, 112, 179);
+  box-shadow: 0 0 30px rgba(0, 191, 255, 0.6);
   mix-blend-mode: difference;
-  transition: top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out,
-    height 0.3s ease-out;
+  clip-path: polygon(23% 25%, 38% 41%, 61% 41%, 77% 24%, 100% 18%, 71% 64%, 50% 84%, 26% 64%, 0% 19%);
+  -webkit-clip-path: polygon(23% 25%, 38% 41%, 61% 41%, 77% 24%, 100% 18%, 71% 64%, 50% 84%, 26% 64%, 0% 19%);
+  animation: 1.5s infinite ease-in-out;
 }
+
+@keyframes flap {
+  0%, 100% {
+    clip-path: polygon(23% 25%, 38% 41%, 61% 41%, 77% 24%, 100% 18%, 71% 64%, 50% 84%, 26% 64%, 0% 19%);
+    -webkit-clip-path: polygon(23% 25%, 38% 41%, 61% 41%, 77% 24%, 100% 18%, 71% 64%, 50% 84%, 26% 64%, 0% 19%);
+    transform: translateY(0);
+  }
+  50% {
+    clip-path: polygon(23% 40%, 38% 41%, 61% 41%, 77% 40%, 100% 55%, 71% 64%, 50% 84%, 26% 64%, 0% 55%);
+    -webkit-clip-path: polygon(23% 40%, 38% 41%, 61% 41%, 77% 40%, 100% 55%, 71% 64%, 50% 84%, 26% 64%, 0% 55%);
+    transform: translateY(0); /* no vertical movement */
+  }
+}
+
 .cursor-icons {
   top: 10px;
   left: 10px;
